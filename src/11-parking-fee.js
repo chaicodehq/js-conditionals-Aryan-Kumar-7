@@ -34,4 +34,36 @@
  */
 export function calculateParkingFee(hours, vehicleType) {
   // Your code here
+  if (
+    typeof hours !== "number" ||
+    typeof vehicleType !== "string" ||
+    hours <= 0
+  ) {
+    return -1;
+  }
+
+  const rates = {
+    car: { first: 5, additional: 3, max: 30 },
+    motorcycle: { first: 3, additional: 2, max: 18 },
+    bus: { first: 10, additional: 7, max: 60 }
+  };
+
+  if (!rates[vehicleType]) {
+    return -1;
+  }
+
+  // Round up partial hours
+  const roundedHours = Math.ceil(hours);
+
+  const { first, additional, max } = rates[vehicleType];
+
+  let total;
+
+  if (roundedHours === 1) {
+    total = first;
+  } else {
+    total = first + (roundedHours - 1) * additional;
+  }
+
+  return Math.min(total, max);
 }
